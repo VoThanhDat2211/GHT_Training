@@ -1,0 +1,42 @@
+plugins {
+    id 'org.springframework.boot' version '4.0.1' apply false
+    id 'io.spring.dependency-management' version '1.1.7' apply false
+}
+
+// Cấu hình áp dụng cho tất cả subproject
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(25)
+        }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    // Import Spring Boot BOM để tất cả module dùng chung version dependency
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:4.0.1"
+            mavenBom "org.testcontainers:testcontainers-bom:1.21.0"
+        }
+    }
+
+    // Dependency dùng chung cho tất cả module
+    dependencies {
+        compileOnly 'org.projectlombok:lombok:1.18.38'
+        annotationProcessor 'org.projectlombok:lombok:1.18.38'
+
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testCompileOnly 'org.projectlombok:lombok:1.18.38'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.38'
+    }
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
+}

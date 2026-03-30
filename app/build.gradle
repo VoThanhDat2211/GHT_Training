@@ -1,0 +1,24 @@
+plugins {
+    id 'org.springframework.boot'
+}
+
+// Chỉ module app mới build ra executable JAR
+dependencies {
+    implementation project(':common')
+    implementation project(':user')
+    implementation project(':booking')
+    implementation project(':ticket')
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    runtimeOnly 'org.postgresql:postgresql'
+
+    // TestContainers - chỉ dùng ở app (integration test)
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:postgresql'
+    testImplementation 'org.testcontainers:rabbitmq'
+}

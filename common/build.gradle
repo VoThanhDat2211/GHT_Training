@@ -1,0 +1,5 @@
+// Module chứa các building block dùng chung, không phụ thuộc domain nào
+dependencies {
+    // Không cần thêm dependency Spring ở đây
+    // common chỉ là pure Java
+}
