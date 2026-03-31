@@ -10,10 +10,13 @@ public class UserDataMapper {
     public UserResponse userToUserResponse(User user) {
         return new UserResponse(
                 user.getId().getValue(),
-                user.getName(),
+                user.getUsername(),
                 user.getEmail(),
+                user.getFullName(),
+                user.getPhoneNumber(),
                 user.getStatus(),
-                user.getCreatedAt()
+                user.getCreatedAt(),
+                user.getUpdatedAt()
         );
     }
 }

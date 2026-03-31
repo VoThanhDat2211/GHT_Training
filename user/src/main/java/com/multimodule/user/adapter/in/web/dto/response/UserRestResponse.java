@@ -5,8 +5,11 @@ import java.util.UUID;
 
 public record UserRestResponse(
         UUID id,
-        String name,
+        String username,
         String email,
+        String fullName,
+        String phoneNumber,
         String status,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {}

@@ -3,9 +3,10 @@ package com.multimodule.user.domain.event;
 import com.multimodule.common.domain.event.DomainEvent;
 import com.multimodule.user.domain.entity.User;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class UserCreatedEvent implements DomainEvent<User> {
+public class UserCreatedEvent implements DomainEvent<User>, Serializable {
 
     private final User user;
     private final LocalDateTime occurredAt;

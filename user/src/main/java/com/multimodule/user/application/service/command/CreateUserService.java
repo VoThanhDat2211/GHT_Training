@@ -8,7 +8,7 @@ import com.multimodule.user.application.port.output.UserMessagePublisher;
 import com.multimodule.user.application.port.output.UserRepository;
 import com.multimodule.user.domain.entity.User;
 import com.multimodule.user.domain.event.UserCreatedEvent;
-import com.multimodule.user.domain.exception.UserDomainException;
+import com.multimodule.user.domain.exception.UserConflictException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,16 +26,27 @@ public class CreateUserService implements CreateUserUseCase {
     @Override
     @Transactional
     public UserResponse createUser(CreateUserCommand command) {
-        if (userRepository.existsByEmail(command.email())) {
-            throw new UserDomainException("Email already exists: " + command.email());
-        }
+        ensureUniqueEmail(command.email());
+        ensureUniqueUsername(command.username());
 
-        User user = User.create(command.name(), command.email());
+        User user = User.create(command.username(), command.email(), command.fullName(), command.phoneNumber());
         User savedUser = userRepository.save(user);
 
         userMessagePublisher.publishUserCreatedEvent(new UserCreatedEvent(savedUser));
         log.info("User created with id: {}", savedUser.getId().getValue());
 
         return userDataMapper.userToUserResponse(savedUser);
+    }
+
+    private void ensureUniqueEmail(String email) {
+        if (userRepository.existsByEmail(email)) {
+            throw new UserConflictException("Email already exists: " + email);
+        }
+    }
+
+    private void ensureUniqueUsername(String username) {
+        if (userRepository.existsByUsername(username)) {
+            throw new UserConflictException("Username already exists: " + username);
+        }
     }
 }

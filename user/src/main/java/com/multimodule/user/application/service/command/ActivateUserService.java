@@ -1,6 +1,8 @@
 package com.multimodule.user.application.service.command;
 
-import com.multimodule.user.application.port.input.command.DeleteUserUseCase;
+import com.multimodule.user.application.dto.response.UserResponse;
+import com.multimodule.user.application.mapper.UserDataMapper;
+import com.multimodule.user.application.port.input.command.ActivateUserUseCase;
 import com.multimodule.user.application.port.output.UserRepository;
 import com.multimodule.user.domain.entity.User;
 import com.multimodule.user.domain.exception.UserNotFoundException;
@@ -15,17 +17,19 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DeleteUserService implements DeleteUserUseCase {
+public class ActivateUserService implements ActivateUserUseCase {
 
     private final UserRepository userRepository;
+    private final UserDataMapper userDataMapper;
 
     @Override
     @Transactional
-    public void deleteUser(UUID userId) {
+    public UserResponse activateUser(UUID userId) {
         User user = userRepository.findById(UserId.of(userId))
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
-        user.softDelete();
-        userRepository.save(user);
-        log.info("User soft deleted with id: {}", userId);
+        user.activate();
+        User savedUser = userRepository.save(user);
+        log.info("User activated with id: {}", userId);
+        return userDataMapper.userToUserResponse(savedUser);
     }
 }
