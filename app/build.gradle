@@ -2,6 +2,10 @@ plugins {
     id 'org.springframework.boot'
 }
 
+tasks.named('bootRun') {
+    jvmArgs = ['-Duser.timezone=Asia/Ho_Chi_Minh']
+}
+
 // Chỉ module app mới build ra executable JAR
 dependencies {
     implementation project(':common')
@@ -15,6 +19,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-database-postgresql'
     runtimeOnly 'org.postgresql:postgresql'

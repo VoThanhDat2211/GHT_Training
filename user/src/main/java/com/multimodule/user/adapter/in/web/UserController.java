@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserRestResponse> getUserById(@PathVariable UUID id) {
+    public ResponseEntity<UserRestResponse> getUserById(@PathVariable("id") UUID id) {
         UserRestResponse response = userWebMapper.toRestResponse(getUserByIdQuery.getUserById(id));
         return ResponseEntity.ok(response);
     }

@@ -41,7 +41,6 @@ Gradle đọc file này đầu tiên để biết project có bao nhiêu module.
 rootProject.name = 'multi-module'
 include 'common'
 include 'user'
-...
 ```
 Không có file này thì Gradle không biết các module con tồn tại.
 
