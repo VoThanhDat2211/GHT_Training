@@ -2,6 +2,11 @@ spring:
   application:
     name: multi-module
 
+  security:
+    user:
+      name: user
+      password: 123456
+
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NAME:postgres}
     username: ${DB_USERNAME:postgres}

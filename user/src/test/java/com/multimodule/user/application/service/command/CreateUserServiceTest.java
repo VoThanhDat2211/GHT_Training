@@ -25,9 +25,9 @@ class CreateUserServiceTest {
 
     @Test
     void shouldCreateUserWhenUsernameAndEmailAreUnique() {
-        CreateUserCommand command = new CreateUserCommand("johnny", "john@mail.com", "John Doe", "0123");
-        when(userRepository.existsByEmail(command.email())).thenReturn(false);
-        when(userRepository.existsByUsername(command.username())).thenReturn(false);
+        CreateUserCommand command = new CreateUserCommand(" johnny ", " JOHN@mail.com ", "John Doe", "0123");
+        when(userRepository.existsByEmail("john@mail.com")).thenReturn(false);
+        when(userRepository.existsByUsername("johnny")).thenReturn(false);
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         var response = createUserService.createUser(command);
@@ -41,7 +41,7 @@ class CreateUserServiceTest {
     @Test
     void shouldRejectDuplicateEmail() {
         CreateUserCommand command = new CreateUserCommand("johnny", "john@mail.com", "John Doe", "0123");
-        when(userRepository.existsByEmail(command.email())).thenReturn(true);
+        when(userRepository.existsByEmail("john@mail.com")).thenReturn(true);
 
         assertThrows(UserConflictException.class, () -> createUserService.createUser(command));
         verify(userRepository, never()).save(any(User.class));

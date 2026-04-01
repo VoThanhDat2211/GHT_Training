@@ -1,4 +1,8 @@
 package com.multimodule.booking.domain.valueobject;
 
-public class BookingStatus {
+public enum BookingStatus {
+    PENDING,
+    CONFIRMED,
+    CANCELLED,
+    EXPIRED
 }

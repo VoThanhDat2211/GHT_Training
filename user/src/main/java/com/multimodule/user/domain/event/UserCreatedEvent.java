@@ -5,22 +5,70 @@ import com.multimodule.user.domain.entity.User;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-public class UserCreatedEvent implements DomainEvent<User>, Serializable {
+public class UserCreatedEvent implements DomainEvent, Serializable {
 
-    private final User user;
+    private final UUID userId;
+    private final String username;
+    private final String email;
+    private final String fullName;
+    private final String phoneNumber;
     private final LocalDateTime occurredAt;
 
-    public UserCreatedEvent(User user) {
-        this.user = user;
-        this.occurredAt = LocalDateTime.now();
+    private UserCreatedEvent(
+            UUID userId,
+            String username,
+            String email,
+            String fullName,
+            String phoneNumber,
+            LocalDateTime occurredAt
+    ) {
+        this.userId = userId;
+        this.username = username;
+        this.email = email;
+        this.fullName = fullName;
+        this.phoneNumber = phoneNumber;
+        this.occurredAt = occurredAt;
+    }
+
+    public static UserCreatedEvent from(User user) {
+        return new UserCreatedEvent(
+                user.getId().getValue(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getFullName(),
+                user.getPhoneNumber(),
+                LocalDateTime.now()
+        );
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     @Override
-    public User getEntity() {
-        return user;
+    public String getEventType() {
+        return "UserCreated";
     }
 
+    @Override
     public LocalDateTime getOccurredAt() {
         return occurredAt;
     }

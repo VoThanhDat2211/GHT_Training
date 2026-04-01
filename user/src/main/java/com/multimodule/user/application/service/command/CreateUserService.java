@@ -26,13 +26,16 @@ public class CreateUserService implements CreateUserUseCase {
     @Override
     @Transactional
     public UserResponse createUser(CreateUserCommand command) {
-        ensureUniqueEmail(command.email());
-        ensureUniqueUsername(command.username());
+        String normalizedEmail = normalizeEmail(command.email());
+        String normalizedUsername = normalize(command.username());
 
-        User user = User.create(command.username(), command.email(), command.fullName(), command.phoneNumber());
+        ensureUniqueEmail(normalizedEmail);
+        ensureUniqueUsername(normalizedUsername);
+
+        User user = User.create(normalizedUsername, normalizedEmail, command.fullName(), command.phoneNumber());
         User savedUser = userRepository.save(user);
 
-        userMessagePublisher.publishUserCreatedEvent(new UserCreatedEvent(savedUser));
+        userMessagePublisher.publishUserCreatedEvent(UserCreatedEvent.from(savedUser));
         log.info("User created with id: {}", savedUser.getId().getValue());
 
         return userDataMapper.userToUserResponse(savedUser);
@@ -48,5 +51,14 @@ public class CreateUserService implements CreateUserUseCase {
         if (userRepository.existsByUsername(username)) {
             throw new UserConflictException("Username already exists: " + username);
         }
+    }
+
+    private String normalize(String value) {
+        return value == null ? null : value.trim();
+    }
+
+    private String normalizeEmail(String value) {
+        String normalized = normalize(value);
+        return normalized == null ? null : normalized.toLowerCase();
     }
 }
